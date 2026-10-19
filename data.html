@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Table</title>
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    margin: 0;
+    padding: 30px 16px;
+  }
+
+  .box {
+    background: #ffffff;
+    max-width: 650px;
+    margin: auto;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  h2 {
+    text-align: center;
+    margin: 0 0 20px;
+    color: #333;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+
+  button {
+    padding: 9px 16px;
+    margin-right: 6px;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  button:hover {
+    background: #5568d3;
+  }
+
+  button:active {
+    transform: scale(0.97);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  th, td {
+    padding: 12px 14px;
+    text-align: left;
+  }
+
+  th {
+    background: #667eea;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  td {
+    border-bottom: 1px solid #eee;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #f6f7fd;
+  }
+
+  tbody tr:hover {
+    background: #e8ebfb;
+  }
+</style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>People</h2>
+
+    <input type="text" id="search" placeholder="Search...">
+    <button id="sortName">Sort by name</button>
+    <button id="sortAge">Sort by age</button>
+
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Age</th><th>City</th></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const people = [
+      { name: "Ahmed", age: 25, city: "Cairo" },
+      { name: "Sara", age: 22, city: "Giza" },
+      { name: "Omar", age: 30, city: "Alexandria" },
+      { name: "Mona", age: 28, city: "Cairo" },
+      { name: "Youssef", age: 19, city: "Aswan" }
+    ];
+
+    let currentData = [...people];
+
+    const tableBody = document.getElementById("tableBody");
+
+    function renderTable(data) {
+      tableBody.innerHTML = "";                  
+      for (let i = 0; i < data.length; i++) {
+        const row = document.createElement("tr");
+        row.innerHTML =
+          "<td>" + data[i].name + "</td>" +
+          "<td>" + data[i].age + "</td>" +
+          "<td>" + data[i].city + "</td>";
+        tableBody.appendChild(row);           
+      }
+    }
+
+    document.getElementById("search").addEventListener("input", function () {
+      const text = this.value.toLowerCase();
+      currentData = people.filter(function (p) {
+        return p.name.toLowerCase().includes(text) ||
+               p.city.toLowerCase().includes(text) ||
+               String(p.age).includes(text);
+      });
+      renderTable(currentData);
+    });
+
+    document.getElementById("sortName").addEventListener("click", function () {
+      currentData.sort(function (a, b) {
+        return a.name.localeCompare(b.name);
+      });
+      renderTable(currentData);
+    });
+
+    document.getElementById("sortAge").addEventListener("click", function () {
+      currentData.sort(function (a, b) {
+        return a.age - b.age;
+      });
+      renderTable(currentData);
+    });
+
+    renderTable(currentData);
+  </script>
+</body>
+</html>
